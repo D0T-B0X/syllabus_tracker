@@ -1,20 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:provider/provider.dart';
+import 'package:syllabus_tracker/viewModel/auth_view_model.dart';
+import 'package:syllabus_tracker/view/login_view.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() {
-  runApp(const MainApp());
-}
+Future main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: ".env");
 
-class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+  await Supabase.initialize(
+    url: "https://pkuypepnumpkbldwwfue.supabase.co",
+    anonKey: dotenv.env['ANON_KEY']!,
+  );
 
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Text('Hello World!'),
-        ),
-      ),
-    );
-  }
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => AuthViewModel(),
+      child: MaterialApp(home: LoginView()),
+    ),
+  );
 }
