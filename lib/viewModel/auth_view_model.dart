@@ -35,9 +35,8 @@ class AuthViewModel with ChangeNotifier {
   /// Validates email format
   ///
   /// • Checks for @ symbol
-  /// • Verifies .com domain presence
   void verifyEmail(String email) {
-    if (!email.contains('@') || !email.contains(".com")) {
+    if (!email.contains('@')) {
       _authEmail.error = "Enter a valid email";
     } else {
       _authEmail.error = null;
