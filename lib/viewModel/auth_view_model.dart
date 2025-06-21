@@ -42,7 +42,6 @@ class AuthViewModel with ChangeNotifier {
       _authEmail.error = null;
       _authEmail.value = email;
     }
-
     notifyListeners();
   }
 
@@ -58,7 +57,7 @@ class AuthViewModel with ChangeNotifier {
         !password.contains(RegExp(r'[!@#%^&*(),.?":{}|<>]'))) {
       // Special char check
       _authPassword.error =
-          "Password must have at least one uppercase, one lowercase, one numerical and one special character";
+          "Password must have more than 8 characters, at least one\nuppercase, one lowercase, one numerical and one\nspecial character";
     } else {
       _authPassword.error = null;
       _authPassword.value = password;
@@ -109,7 +108,7 @@ class AuthViewModel with ChangeNotifier {
     }
   }
 
-  // TODO: Add signUp method
+  // TODO: Add signUp method  -- completed
   // TODO: Add signOut method
   // TODO: Add passwordReset method
 }

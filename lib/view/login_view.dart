@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:syllabus_tracker/view/signup_view.dart';
 import 'package:syllabus_tracker/viewModel/auth_view_model.dart';
 
 //╔══════════════════════════════════════════════════════════════════════════╗
@@ -117,6 +118,19 @@ class LoginView extends StatelessWidget {
                         }
                       },
                       child: Text('Submit'),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 40),
+                      child: TextButton(onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (_) => const signUp()),
+                        );
+                      },
+                          child: const Text("Don't have an account? SignUp",
+                          style: TextStyle(
+                            fontSize: 20,
+                          ),)),
                     ),
                   ],
                 );
