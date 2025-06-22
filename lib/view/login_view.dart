@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:syllabus_tracker/view/signup_view.dart';
 import 'package:syllabus_tracker/viewModel/auth_view_model.dart';
+import 'package:syllabus_tracker/view/subject_list_view.dart';
 
 //╔══════════════════════════════════════════════════════════════════════════╗
-//║ LOGIN VIEW                                                               ║
-//║                                                                          ║
-//║ Provides user interface for authentication including email/password      ║
-//║ input fields and login submission handling.                              ║
+//║ LOGIN VIEW                                                             ║
+//║ Provides user interface for authentication including email/password     ║
+//║ input fields and login submission handling.                            ║
 //╚══════════════════════════════════════════════════════════════════════════╝
 class LoginView extends StatelessWidget {
   //┌─────────────────────────────────────────────┐
@@ -20,6 +20,9 @@ class LoginView extends StatelessWidget {
   /// Controls the password input field text
   final TextEditingController _passwordController = TextEditingController();
 
+  /// State Manager for password obscure parameter
+  final ValueNotifier<bool> _obscurePassword = ValueNotifier<bool>(true);
+
   /// Default constructor
   LoginView({super.key});
 
@@ -31,6 +34,7 @@ class LoginView extends StatelessWidget {
     return Center(
       child: Scaffold(
         body: Card(
+          elevation: 0,
           // Card contains the entire login form
           child: Padding(
             padding: EdgeInsets.all(12),
@@ -44,7 +48,11 @@ class LoginView extends StatelessWidget {
                     // Title section
                     Text(
                       'Login',
-                      style: TextStyle(color: Colors.red, fontSize: 40),
+                      style: TextStyle(
+                        color: const Color(0xffd40e00),
+                        fontSize: 40,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     SizedBox(height: 24),
 
@@ -55,82 +63,133 @@ class LoginView extends StatelessWidget {
                       decoration: InputDecoration(
                         labelText: "Email",
                         errorText: viewModel.email.error,
+                        floatingLabelStyle: TextStyle(color: Colors.black),
                         floatingLabelBehavior: FloatingLabelBehavior.auto,
                         border: OutlineInputBorder(),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.black, width: 2),
+                        ),
                       ),
                     ),
                     SizedBox(height: 12),
 
-                    // Password input field
-                    TextField(
-                      controller: _passwordController,
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        labelText: "Password",
-                        errorText: viewModel.password.error,
-                        floatingLabelBehavior: FloatingLabelBehavior.auto,
-                        border: OutlineInputBorder(),
-                      ),
+                    // Password input field with toggle visibility
+                    ValueListenableBuilder<bool>(
+                      valueListenable: _obscurePassword,
+                      builder: (context, obscure, _) {
+                        return TextField(
+                          controller: _passwordController,
+                          obscureText: obscure,
+                          decoration: InputDecoration(
+                            labelText: "Password",
+                            errorText: viewModel.password.error,
+                            floatingLabelStyle: TextStyle(color: Colors.black),
+                            floatingLabelBehavior: FloatingLabelBehavior.auto,
+                            border: OutlineInputBorder(),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.black,
+                                width: 2,
+                              ),
+                            ),
+                            // Toggle password visibility
+                            suffixIcon: IconButton(
+                              onPressed: () {
+                                _obscurePassword.value =
+                                    !_obscurePassword.value;
+                              },
+                              icon: Icon(
+                                obscure
+                                    ? Icons.visibility_off
+                                    : Icons.visibility,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
+                        );
+                      },
                     ),
                     SizedBox(height: 24),
 
                     // Login button
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red,
-                        foregroundColor: Colors.white,
-                      ),
-                      onPressed: () async {
-                        // 1. Extract input values
-                        final email = _emailController.text;
-                        final password = _passwordController.text;
+                    SizedBox(
+                      width: double.infinity,
+                      height: 50.0,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Color(0xffd40e00),
+                          foregroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(9),
+                          ),
+                        ),
+                        onPressed: () async {
+                          // 1. Extract input values
+                          final email = _emailController.text;
+                          final password = _passwordController.text;
 
-                        // 2. Validate credentials
-                        viewModel.verifyEmail(email);
-                        viewModel.verifyPassword(password);
+                          // 2. Validate credentials
+                          viewModel.verifyEmail(email);
+                          viewModel.verifyPassword(password);
 
-                        // 3. Attempt login if validation passes
-                        if (viewModel.email.error == null &&
-                            viewModel.password.error == null) {
-                          try {
-                            // Authenticate with Supabase
-                            final success = await viewModel.signIn();
-                            String result;
+                          // 3. Attempt login if validation passes
+                          if (viewModel.email.error == null &&
+                              viewModel.password.error == null) {
+                            try {
+                              // Authenticate with Supabase
+                              final success = await viewModel.signIn();
+                              String result = "";
 
-                            // 4. Handle authentication result
-                            if (success) {
-                              result = "Login Successful";
-                            } else {
-                              result =
-                                  "Login failed. Please Check your credentials";
+                              // 4. Handle authentication result
+                              if (success) {
+                                result = "Login Successful";
+                                // Navigate to SubjectListView and remove all previous routes
+                                Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => const SubjectListView(),
+                                  ),
+                                  (route) => false,
+                                );
+                              } else {
+                                // 5. Show feedback to user
+                                result =
+                                    "Login failed. Please Check your credentials";
+                              }
+                              // Show result as a SnackBar
+                              ScaffoldMessenger.of(
+                                context,
+                              ).showSnackBar(SnackBar(content: Text(result)));
+                            } catch (e) {
+                              // Handle unexpected errors
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text('Error: ${e.toString()}'),
+                                ),
+                              );
                             }
-
-                            // 5. Show feedback to user
-                            ScaffoldMessenger.of(
-                              context,
-                            ).showSnackBar(SnackBar(content: Text(result)));
-                          } catch (e) {
-                            // Handle unexpected errors
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('Error: ${e.toString()}')),
-                            );
                           }
-                        }
-                      },
-                      child: Text('Submit'),
+                        },
+                        child: Text('Login', style: TextStyle(fontSize: 16)),
+                      ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 40),
-                      child: TextButton(onPressed: () {
+                    SizedBox(height: 12),
+                    // Sign up navigation button
+                    TextButton(
+                      onPressed: () {
                         Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (_) => const signUp()),
+                          context,
+                          MaterialPageRoute(builder: (_) => const SignupView()),
                         );
                       },
-                          child: const Text("Don't have an account? SignUp",
-                          style: TextStyle(
-                            fontSize: 20,
-                          ),)),
+                      child: const Text(
+                        "Don't have an account? Sign up",
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.black,
+                          decoration: TextDecoration.underline,
+                        ),
+                      ),
                     ),
                   ],
                 );

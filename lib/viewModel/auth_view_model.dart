@@ -3,10 +3,9 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:syllabus_tracker/model/auth_model.dart';
 
 //╔══════════════════════════════════════════════════════════════════════════╗
-//║ AUTH VIEW MODEL                                                          ║
-//║                                                                          ║
-//║ Manages authentication logic, credential validation, and Supabase auth   ║
-//║ operations for the syllabus tracker application.                         ║
+//║ AUTH VIEW MODEL                                                        ║
+//║ Manages authentication logic, credential validation, sign up, and      ║
+//║ Supabase auth operations for the syllabus tracker application.         ║
 //╚══════════════════════════════════════════════════════════════════════════╝
 class AuthViewModel with ChangeNotifier {
   //┌─────────────────────────────────────────────┐
@@ -26,7 +25,16 @@ class AuthViewModel with ChangeNotifier {
   AuthModel get password => _authPassword;
 
   /// Loading indicator for async operations
-  bool isLoading = false;
+  bool _isLoading = false;
+  bool get isLoading => _isLoading;
+
+  /// Error message for sign up or sign in
+  String? _errorMessage;
+  String? get errorMessage => _errorMessage;
+
+  /// Success state for sign up
+  bool _isSuccess = false;
+  bool get isSuccess => _isSuccess;
 
   //┌─────────────────────────────────────────────┐
   //│ VALIDATION METHODS                          │
@@ -83,7 +91,7 @@ class AuthViewModel with ChangeNotifier {
     }
 
     // Set loading state
-    isLoading = true;
+    _isLoading = true;
     notifyListeners();
 
     try {
@@ -94,21 +102,105 @@ class AuthViewModel with ChangeNotifier {
         password: password.value!,
       );
 
-      // Reset loading and return result
-      isLoading = false;
+      _isLoading = false;
       notifyListeners();
 
+      // Return true if user is authenticated
       return response.user != null;
     } catch (e) {
-      // Handle authentication failure
-      isLoading = false;
-      _authEmail.error = "Login failed: ${e.toString()}";
+      // Handle authentication failure and set error message
+      _isLoading = false;
+      String errorMsg = "Login Failed";
+      if (e is AuthException) {
+        errorMsg = "Login failed: ${e.message}";
+      } else if (e is AuthApiException) {
+        errorMsg = "Login failed: ${e.message}";
+      } else if (e is Exception) {
+        errorMsg = "Login failed: ${e.toString().split(':').last.trim()}";
+      }
+      _authEmail.error = errorMsg;
+      _errorMessage = errorMsg;
       notifyListeners();
       return false;
     }
   }
 
-  // TODO: Add signUp method  -- completed
+  /// Registers a new user with Supabase
+  Future<void> registerUser(String email, String password) async {
+    _isLoading = true;
+    notifyListeners();
+
+    try {
+      // Attempt Supabase sign up
+      final response = await Supabase.instance.client.auth.signUp(
+        email: email,
+        password: password,
+      );
+      if (response.user == null) {
+        throw Exception("SignUp Failed");
+      }
+    } catch (e) {
+      // Handle sign up failure and set error message
+      String errorMsg = "SignUp Failed";
+      if (e is AuthException) {
+        errorMsg = "SignUp failed: ${e.message}";
+      } else if (e is AuthApiException) {
+        errorMsg = "SignUp failed: ${e.message}";
+      } else if (e is Exception) {
+        errorMsg = "SignUp failed: ${e.toString().split(':').last.trim()}";
+      }
+      _errorMessage = errorMsg;
+      _isSuccess = false;
+      notifyListeners();
+      rethrow;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  /// Handles sign up button logic, including password confirmation
+  Future<void> signUpButton(
+    String email,
+    String password,
+    String confirmPassword,
+  ) async {
+    // Check if password and confirm password match
+    if (password != confirmPassword) {
+      _errorMessage = "'Password' and 'Confirm Password' are different";
+      _isSuccess = false;
+      notifyListeners();
+      return;
+    }
+    try {
+      _isLoading = true;
+      notifyListeners();
+      await registerUser(email, password);
+      _isSuccess = true;
+      _errorMessage = null;
+      notifyListeners();
+    } catch (e) {
+      // Error already handled in registerUser
+      _isSuccess = false;
+      notifyListeners();
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  /// Clears error message
+  void clearError() {
+    _errorMessage = null;
+    notifyListeners();
+  }
+
+  /// Resets success state
+  void resetSuccess() {
+    _isSuccess = false;
+    notifyListeners();
+  }
+
   // TODO: Add signOut method
   // TODO: Add passwordReset method
 }

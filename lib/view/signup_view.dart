@@ -1,26 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:syllabus_tracker/view/login_view.dart';
-import 'package:syllabus_tracker/viewModel/signUp_view_model.dart';
 import 'package:syllabus_tracker/viewModel/auth_view_model.dart';
 
-class signUp extends StatefulWidget {
-  const signUp({super.key});
+class SignupView extends StatefulWidget {
+  const SignupView({super.key});
 
   @override
-  State<signUp> createState() => _signUpState();
+  State<SignupView> createState() => _SignupState();
 }
 
-class _signUpState extends State<signUp> {
-  final email_Controller = TextEditingController();
-  final password_Controller = TextEditingController();
-  final confirmPassword_Controller = TextEditingController();
+class _SignupState extends State<SignupView> {
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final vm = context.read<SignUpViewModel>();
+      final vm = context.read<AuthViewModel>();
       if (vm.errorMessage != null) {
         ScaffoldMessenger.of(
           context,
@@ -28,14 +27,15 @@ class _signUpState extends State<signUp> {
         vm.clearError();
       }
       if (vm.isSuccess) {
+        Navigator.push(context, MaterialPageRoute(builder: (_) => LoginView()));
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(SnackBar(content: Text("SignUp Successful")));
+        ).showSnackBar(SnackBar(content: Text("Signup Successful")));
         vm.resetSuccess();
       }
     });
     final viewModel = context.watch<AuthViewModel>();
-    final signUp = context.watch<SignUpViewModel>();
+    final signupView = context.watch<AuthViewModel>();
     return Stack(
       children: [
         Scaffold(
@@ -56,7 +56,7 @@ class _signUpState extends State<signUp> {
                     child: Column(
                       children: [
                         TextFormField(
-                          controller: email_Controller,
+                          controller: emailController,
                           style: TextStyle(fontSize: 30),
                           onChanged: (value) {
                             viewModel.verifyEmail(value);
@@ -77,7 +77,7 @@ class _signUpState extends State<signUp> {
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 50),
                           child: TextFormField(
-                            controller: password_Controller,
+                            controller: passwordController,
                             obscureText: _obscurePassword,
                             style: TextStyle(fontSize: 30),
                             onChanged: (value) {
@@ -119,7 +119,7 @@ class _signUpState extends State<signUp> {
                           ),
                         ),
                         TextFormField(
-                          controller: confirmPassword_Controller,
+                          controller: confirmPasswordController,
                           obscureText: _obscureConfirmPassword,
                           style: TextStyle(fontSize: 30),
                           onChanged: (value) {
@@ -176,12 +176,12 @@ class _signUpState extends State<signUp> {
                               style: TextStyle(fontSize: 25),
                             ),
                             onPressed: () async {
-                              final email = email_Controller.text.trim();
-                              final password = password_Controller.text.trim();
-                              final confirmPassword = confirmPassword_Controller
+                              final email = emailController.text.trim();
+                              final password = passwordController.text.trim();
+                              final confirmPassword = confirmPasswordController
                                   .text
                                   .trim();
-                              context.read<SignUpViewModel>().SignUpButton(
+                              context.read<AuthViewModel>().signUpButton(
                                 email,
                                 password,
                                 confirmPassword,
@@ -209,7 +209,7 @@ class _signUpState extends State<signUp> {
             ],
           ),
         ),
-        if (signUp.isLoading)
+        if (signupView.isLoading)
           Container(
             color: Colors.black.withValues(alpha: 0.3),
             child: const Center(child: CircularProgressIndicator()),
@@ -220,9 +220,9 @@ class _signUpState extends State<signUp> {
 
   @override
   void dispose() {
-    email_Controller.dispose();
-    password_Controller.dispose();
-    confirmPassword_Controller.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    confirmPasswordController.dispose();
     super.dispose();
   }
 }
