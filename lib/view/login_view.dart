@@ -100,6 +100,7 @@ class LoginView extends StatelessWidget {
                             // 4. Handle authentication result
                             if (success) {
                               result = "Login Successful";
+                              Navigator.pushNamed(context, '/subjects');
                             } else {
                               result =
                                   "Login failed. Please Check your credentials";

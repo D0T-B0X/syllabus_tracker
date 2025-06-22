@@ -31,6 +31,7 @@ class _signUpState extends State<signUp> {
         ScaffoldMessenger.of(
           context,
         ).showSnackBar(SnackBar(content: Text("SignUp Successful")));
+        Navigator.pushNamed(context, '/subjects');
         vm.resetSuccess();
       }
     });
@@ -178,13 +179,9 @@ class _signUpState extends State<signUp> {
                             onPressed: () async {
                               final email = email_Controller.text.trim();
                               final password = password_Controller.text.trim();
-                              final confirmPassword = confirmPassword_Controller
-                                  .text
-                                  .trim();
+                              final confirmPassword = confirmPassword_Controller.text.trim();
                               context.read<SignUpViewModel>().SignUpButton(
-                                email,
-                                password,
-                                confirmPassword,
+                                email, password, confirmPassword,
                               );
                             },
                           ),
