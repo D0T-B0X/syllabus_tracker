@@ -23,4 +23,5 @@ flutter:
   
   assets:
     - .env
-    - lib/db/subject_data.json
+    - assets/data/subject_data.json
+    - assets/images/ST.png
