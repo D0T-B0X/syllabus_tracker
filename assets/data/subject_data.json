@@ -1,0 +1,179 @@
+{
+        "EE-10002": {
+            "name": "Basic Electrical Engineering",
+            "topics": [
+                "Fundamental Electrical Quantities and Laws",
+                "Ohm’s Law and Electrical Circuit Elements",
+                "DC Circuits: Analysis and Theorems",
+                "Kirchhoff’s Laws, Mesh and Nodal Analysis",
+                "Superposition, Thevenin, and Norton Theorems",
+                "AC Circuits: Sinusoidal Waveforms and Phasors",
+                "Single-Phase AC Circuits: RLC Analysis and Resonance",
+                "Three-Phase Circuits: Star and Delta Connections, Power Measurement",
+                "Magnetic Circuits and Electromagnetic Induction",
+                "Transformers: Construction, Working, Losses, and Efficiency",
+                "Auto-Transformers and Three-Phase Transformer Connections",
+                "DC Machines: Generators and Motors, Speed Control",
+                "Three-Phase Induction Motors: Construction, Operation, Speed Control",
+                "Single-Phase Induction Motors: Construction and Characteristics",
+                "Synchronous Generators",
+                "Electrical Installations: Domestic Wiring, Earthing, Energy Consumption Calculations",
+                "Electrical Safety and Applications"
+            ]
+        },
+
+        "HS-10202": {
+            "name": "Essentials of Management",
+            "topics": [
+                "Introduction to Management",
+                "Functions of Management",
+                "Planning and Decision Making",
+                "Organizing and Staffing",
+                "Directing and Leadership",
+                "Controlling",
+                "Marketing Management",
+                "Financial Management",
+                "Operations Management"
+            ]
+        },
+
+        "MA-11001": {
+            "name": "Differential Equations and Linear Algebra",
+            "topics": [
+                "First Order Ordinary Differential Equations",
+                "Second Order Linear Differential Equations",
+                "Applications of Differential Equations",
+                "Special Functions (Gamma, Beta, Legendre, Bessel)",
+                "Power Series and Convergence",
+                "Systems of Linear Equations",
+                "Vector Spaces and Linear Transformations",
+                "Matrices and Determinants",
+                "Eigenvalues and Eigenvectors",
+                "Diagonalization and Quadratic Forms"
+            ]
+        },
+
+        "MA-11002": {
+            "name": "Transforms and Numerical Methods",
+            "topics": [
+                "Laplace Transforms: Properties and Applications",
+                "Inverse Laplace Transform",
+                "Laplace Transform of Derivatives and Integrals",
+                "Unit Step and Dirac Delta Functions",
+                "Convolution and Solution of ODEs using Laplace Transform",
+                "Fourier Series: Expansion and Properties",
+                "Fourier Transform and Its Applications",
+                "Fourier Cosine and Sine Transforms",
+                "Numerical Approximations and Error Analysis",
+                "Numerical Solutions of Nonlinear Equations",
+                "Interpolation: Newton and Lagrange Methods",
+                "Numerical Differentiation and Integration",
+                "Numerical Solution of Ordinary Differential Equations",
+                "Solution of Linear Systems: Iterative Methods"
+            ]
+        },
+
+        "ME-10003": {
+            "name": "Basic Mechanical Engineering",
+            "topics": [
+                "Introduction to Mechanical Engineering and Applications",
+                "Concepts of Thermodynamics: Systems, Properties, State, and Cycle",
+                "First and Second Laws of Thermodynamics",
+                "Entropy and Thermodynamic Equilibrium",
+                "Fluid Mechanics: Properties of Fluids and Pressure Variation",
+                "Bernoulli’s Equation and Its Applications",
+                "Hydraulic Machines: Turbines and Pumps",
+                "Mechanics of Materials: Stress, Strain, and Elastic Constants",
+                "Stress-Strain Diagrams and Factor of Safety",
+                "Loading of Members and Hooke’s Law",
+                "Power Transmission: Gear, Belt, and Chain Drives",
+                "Shafts Under Different Loading Conditions",
+                "Introduction to Robotics: Motions, Sensors, and Actuators",
+                "Engineering Materials: Types, Classification, and Properties",
+                "Manufacturing Processes: Casting, Forming, Forging, Rolling, Extrusion, and Welding",
+                "Machine Tools: NC, CNC, and 3-D Printing",
+                "Applications and Safety in Mechanical Engineering"
+            ]
+        },
+
+        "LS-10001": {
+            "name": "Science of Living System",
+            "topics": [
+                "Biodiversity and Cellular Organization",
+                "Prokaryotic and Eukaryotic Cells",
+                "Cell Division, Growth, and Reproduction",
+                "Metabolism and Homeostasis",
+                "Genes and Chromosomes",
+                "Biomolecules: Carbohydrates, Proteins, Lipids, Nucleic Acids",
+                "Minerals and Chemical Bonding in Life",
+                "Protein Synthesis and Stem Cells",
+                "Enzymes: Structure, Function, and Catalysis",
+                "Photosynthesis: Mechanism and Factors",
+                "Metabolism and Bioenergetics",
+                "Molecular Machines and Motors",
+                "Cytoskeleton and Cellular Structures",
+                "Biosensors: Principles and Applications",
+                "Bioremediation: Types and Role of Microorganisms",
+                "Nervous System: Structure and Neural Networks",
+                "Immune System: Innate and Adaptive Immunity",
+                "Immune Engineering",
+                "Cell Signaling"
+            ]
+        },
+
+        "PH-10001": {
+            "name": "Physics",
+            "topics": [
+                "Oscillations: Damped, Forced, and Coupled Oscillations",
+                "Resonance and Applications",
+                "Waves and Superposition",
+                "Interference of Light: Division of Wavefront and Amplitude",
+                "Interference in Thin Films: Newton’s Rings, Michelson Interferometer",
+                "Diffraction: Single Slit, Grating, and Applications",
+                "Electromagnetic Theory: Maxwell’s Equations and EM Waves",
+                "Vector Calculus in Physics",
+                "Quantum Mechanics: Dual Nature, de Broglie Hypothesis, Uncertainty Principle",
+                "Schrodinger’s Equations and Applications",
+                "Quantum Tunneling",
+                "Laser: Principles, Types, and Applications",
+                "Fiber Optics: Principles, Types, and Applications"
+            ]
+        },
+
+        "MA-10003": {
+            "name": "Optimization Technique",
+            "topics": [
+                "Linear Programming: Formulation and Geometrical Ideas",
+                "Simplex Method",
+                "Duality in Linear Programming",
+                "Transportation Problems: Methods and Optimality",
+                "Assignment Problems: Hungarian Method and Variants",
+                "Travelling Salesman Problem",
+                "Unbalanced and Maximization Cases in Transportation and Assignment",
+                "Mathematical Foundations and Basic Definitions"
+            ]
+        },
+
+        "EC-10001": {
+            "name": "Basic Electronics",
+            "topics": [
+                "Properties of Semiconductor Materials",
+                "P-N Junction Diodes and Applications",
+                "Diode Characteristics and Breakdown Mechanisms",
+                "Rectifiers: Half-wave and Full-wave with Filters",
+                "Zener Diode and Voltage Regulation",
+                "Transistor Construction, Operation, and Characteristics",
+                "Transistor Biasing and Amplifiers",
+                "JFET and MOSFET: Concepts and Applications",
+                "Operational Amplifier (Op-Amp): Characteristics and Applications",
+                "Op-Amp Circuits: Inverting, Non-inverting, Summing, Difference, Comparator",
+                "Number Systems and Conversions",
+                "Logic Gates and Truth Tables",
+                "Combinational and Sequential Circuits",
+                "SCR and Miscellaneous Electronic Devices",
+                "Opto-electronic Devices and Fiber Techniques",
+                "Sensors: Introduction and Performance",
+                "Analog Communication Techniques: AM and FM"
+            ]
+        }
+}
