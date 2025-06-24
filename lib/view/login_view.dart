@@ -142,7 +142,8 @@ class LoginView extends StatelessWidget {
 
                               // 4. Handle authentication result
                               if (success) {
-                                String? displayName = viewModel.getUsername();
+                                String? displayName = await viewModel
+                                    .getUsername();
                                 if (displayName == null) {
                                   result = "Welcome!";
                                 } else {

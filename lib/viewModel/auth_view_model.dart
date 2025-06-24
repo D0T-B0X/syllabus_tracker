@@ -202,12 +202,22 @@ class AuthViewModel with ChangeNotifier {
   }
 
   /// Returns the username of the currently logged in user
-  String? getUsername() {
+  Future<String?> getUsername() async {
     final User? user = Supabase.instance.client.auth.currentUser;
-    final String? display_name = user?.userMetadata?['display_name'];
+    final String? uid = user?.id;
 
-    return display_name;
+    final userResponse = await Supabase.instance.client
+        .from('user_data')
+        .select('username')
+        .eq('user_id', uid!)
+        .single();
+
+    String? displayName;
+
+    if (userResponse.isNotEmpty) {
+      displayName = userResponse['username'];
+    }
+
+    return displayName;
   }
-
-  // TODO: Add signOut method
 }
