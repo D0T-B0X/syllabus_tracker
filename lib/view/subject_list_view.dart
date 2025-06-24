@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:syllabus_tracker/viewModel/subject_list_view_model.dart';
+import 'package:syllabus_tracker/widgets/top_app_bar.dart';
+import 'package:syllabus_tracker/widgets/bottom_bar.dart';
 
 /// Displays the list of subjects in a grid with a custom bottom navigation bar.
 class SubjectListView extends StatelessWidget {
@@ -14,54 +16,8 @@ class SubjectListView extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
 
-      // Custom bottom navigation bar with Home and Leaderboard icons.
-      bottomNavigationBar: BottomAppBar(
-        height: 70.0,
-        color: Colors.white,
-        child: Row(
-          children: [
-            // Home button (scrolls to top)
-            Expanded(
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Color(0x2f000000),
-                  borderRadius: BorderRadius.circular(6),
-                ),
-                child: IconButton(
-                  onPressed: () {
-                    // Scroll to the top of the subject list when pressed
-                    _scrollController.animateTo(
-                      0,
-                      duration: const Duration(milliseconds: 400),
-                      curve: Curves.easeOut,
-                    );
-                  },
-                  icon: Icon(Icons.home_filled),
-                ),
-              ),
-            ),
-            // Leaderboard button (currently does nothing)
-            Expanded(
-              child: IconButton(
-                onPressed: () {},
-                icon: Icon(Icons.leaderboard),
-              ),
-            ),
-          ],
-        ),
-      ),
-
       // App bar with centered title and no back button
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: const Center(
-          child: Text(
-            'Syllabus Tracker',
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-          ),
-        ),
-        backgroundColor: Colors.white,
-      ),
+      appBar: TopAppBar(pageName: "Subjects"),
 
       // Main body: List of subjects
       body: Consumer<SubjectListViewModel>(
@@ -152,6 +108,12 @@ class SubjectListView extends StatelessWidget {
             ),
           );
         },
+      ),
+
+      // Custom bottom navigation bar with Home and Leaderboard icons.
+      bottomNavigationBar: BottomBar(
+        pageName: "subjects",
+        scrollController: _scrollController,
       ),
     );
   }

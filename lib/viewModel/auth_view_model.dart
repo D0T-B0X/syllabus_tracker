@@ -201,6 +201,13 @@ class AuthViewModel with ChangeNotifier {
     notifyListeners();
   }
 
+  /// Returns the username of the currently logged in user
+  String? getUsername() {
+    final User? user = Supabase.instance.client.auth.currentUser;
+    final String? display_name = user?.userMetadata?['display_name'];
+
+    return display_name;
+  }
+
   // TODO: Add signOut method
-  // TODO: Add passwordReset method
 }

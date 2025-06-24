@@ -49,7 +49,7 @@ class LoginView extends StatelessWidget {
                     Text(
                       'Login',
                       style: TextStyle(
-                        color: const Color(0xffd40e00),
+                        color: const Color(0xffb00000),
                         fontSize: 40,
                         fontWeight: FontWeight.bold,
                       ),
@@ -117,7 +117,7 @@ class LoginView extends StatelessWidget {
                       height: 50.0,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xffd40e00),
+                          backgroundColor: Color(0xffb00000),
                           foregroundColor: Colors.white,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(9),
@@ -142,7 +142,12 @@ class LoginView extends StatelessWidget {
 
                               // 4. Handle authentication result
                               if (success) {
-                                result = "Login Successful";
+                                String? displayName = viewModel.getUsername();
+                                if (displayName == null) {
+                                  result = "Welcome!";
+                                } else {
+                                  result = "Welcome, $displayName!";
+                                }
                                 // Navigate to SubjectListView and remove all previous routes
                                 Navigator.pushAndRemoveUntil(
                                   context,
@@ -170,7 +175,7 @@ class LoginView extends StatelessWidget {
                             }
                           }
                         },
-                        child: Text('Login', style: TextStyle(fontSize: 16)),
+                        child: Text('Login', style: TextStyle(fontSize: 18)),
                       ),
                     ),
                     SizedBox(height: 12),
@@ -179,7 +184,7 @@ class LoginView extends StatelessWidget {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (_) => const SignupView()),
+                          MaterialPageRoute(builder: (_) => SignupView()),
                         );
                       },
                       child: const Text(
