@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:syllabus_tracker/viewModel/user_profile_view_model.dart';
 
-class ChangeUsernameDialog extends StatelessWidget {
+class ChangeUsernamePopup extends StatelessWidget {
   final TextEditingController controller;
-  const ChangeUsernameDialog({required this.controller, super.key});
+  const ChangeUsernamePopup({required this.controller, super.key});
 
   @override
   Widget build(BuildContext context) {

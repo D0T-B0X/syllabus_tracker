@@ -46,7 +46,7 @@ class UserProfileView extends StatelessWidget {
                     onTap: () async {
                       final result = await showDialog(
                         context: context,
-                        builder: (context) => ChangeUsernameDialog(
+                        builder: (context) => ChangeUsernamePopup(
                           controller: _usernameController,
                         ),
                       );
