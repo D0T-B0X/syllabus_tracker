@@ -19,7 +19,13 @@ class UserProfileView extends StatelessWidget {
       body: Consumer<UserProfileViewModel>(
         builder: (context, viewModel, child) {
           if (viewModel.username == "") {
-            viewModel.loadUsername();
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              viewModel.loadUsername();
+            });
+          }
+
+          if (viewModel.isLoading) {
+            return const Center(child: CircularProgressIndicator());
           }
 
           return Center(
