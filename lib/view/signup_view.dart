@@ -11,32 +11,32 @@ class SignupView extends StatefulWidget {
 }
 
 class _SignupState extends State<SignupView> {
+  final nameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
+
   @override
   Widget build(BuildContext context) {
+    final signupView = context.watch<AuthViewModel>();
+    // signupView.resetSuccess();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final vm = context.read<AuthViewModel>();
-      if (vm.errorMessage != null) {
+      if (signupView.errorMessage != null) {
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(SnackBar(content: Text(vm.errorMessage!)));
-        vm.clearError();
+        ).showSnackBar(SnackBar(content: Text(signupView.errorMessage!)));
+        signupView.clearError();
       }
-      if (vm.isSuccess) {
-        Navigator.push(context, MaterialPageRoute(builder: (_) => LoginView()));
+      else if (signupView.isSuccess) {
         ScaffoldMessenger.of(
           context,
         ).showSnackBar(SnackBar(content: Text("SignUp Successful")));
         Navigator.pushNamed(context, '/subjects');
-        vm.resetSuccess();
+        signupView.resetSuccess();
       }
     });
-    final viewModel = context.watch<AuthViewModel>();
-    final signupView = context.watch<AuthViewModel>();
     return Stack(
       children: [
         Scaffold(
@@ -46,7 +46,7 @@ class _SignupState extends State<SignupView> {
               style: TextStyle(color: Colors.red, fontSize: 50),
             ),
             centerTitle: true,
-            toolbarHeight: 200,
+            toolbarHeight: 140,
           ),
           body: Stack(
             children: [
@@ -57,14 +57,14 @@ class _SignupState extends State<SignupView> {
                     child: Column(
                       children: [
                         TextFormField(
-                          controller: emailController,
+                          controller: nameController,
                           style: TextStyle(fontSize: 30),
                           onChanged: (value) {
-                            viewModel.verifyEmail(value);
+                            signupView.verifyEmail(value);
                           },
                           decoration: InputDecoration(
-                            labelText: "Email",
-                            errorText: viewModel.email.error,
+                            labelText: "Name",
+                            // errorText: signupView.email.error,
                             labelStyle: TextStyle(
                               color: Colors.green,
                               fontSize: 30,
@@ -76,17 +76,39 @@ class _SignupState extends State<SignupView> {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 50),
+                          padding: const EdgeInsets.symmetric(vertical: 30),
+                          child: TextFormField(
+                            controller: emailController,
+                            style: TextStyle(fontSize: 30),
+                            onChanged: (value) {
+                              signupView.verifyEmail(value);
+                            },
+                            decoration: InputDecoration(
+                              labelText: "Email",
+                              errorText: signupView.email.error,
+                              labelStyle: TextStyle(
+                                color: Colors.green,
+                                fontSize: 30,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 30),
                           child: TextFormField(
                             controller: passwordController,
                             obscureText: _obscurePassword,
                             style: TextStyle(fontSize: 30),
                             onChanged: (value) {
-                              viewModel.verifyPassword(value);
+                              signupView.verifyPassword(value);
                             },
                             decoration: InputDecoration(
                               labelText: "Set a Password",
-                              errorText: viewModel.password.error,
+                              errorText: signupView.password.error,
                               labelStyle: TextStyle(
                                 color: Colors.green,
                                 fontSize: 30,
@@ -124,11 +146,11 @@ class _SignupState extends State<SignupView> {
                           obscureText: _obscureConfirmPassword,
                           style: TextStyle(fontSize: 30),
                           onChanged: (value) {
-                            viewModel.verifyPassword(value);
+                            signupView.verifyPassword(value);
                           },
                           decoration: InputDecoration(
                             labelText: "Confirm Password",
-                            errorText: viewModel.password.error,
+                            errorText: signupView.password.error,
                             labelStyle: TextStyle(
                               color: Colors.green,
                               fontSize: 30,
@@ -162,7 +184,7 @@ class _SignupState extends State<SignupView> {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(top: 80, bottom: 40),
+                          padding: const EdgeInsets.only(top: 60, bottom: 40),
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.red,
@@ -177,11 +199,12 @@ class _SignupState extends State<SignupView> {
                               style: TextStyle(fontSize: 25),
                             ),
                             onPressed: () async {
+                              final name = nameController.text.trim();
                               final email = emailController.text.trim();
                               final password = passwordController.text.trim();
                               final confirmPassword = confirmPasswordController.text.trim();
                               context.read<AuthViewModel>().signUpButton(
-                                email, password, confirmPassword,
+                                name, email,password, confirmPassword,
                               );
                             },
                           ),
