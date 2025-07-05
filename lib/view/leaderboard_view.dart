@@ -104,7 +104,7 @@ class LeaderboardView extends StatelessWidget {
 
                             // Display topics completed count
                             Text(
-                              userData['topics_completed'],
+                              userData['topics_completed']?.toString() ?? '0',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
