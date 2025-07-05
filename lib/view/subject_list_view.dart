@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:syllabus_tracker/viewModel/subject_list_view_model.dart';
 import 'package:syllabus_tracker/widgets/top_app_bar.dart';
 import 'package:syllabus_tracker/widgets/bottom_bar.dart';
+import 'package:syllabus_tracker/view/topics_list_view.dart';
 
 /// Displays the list of subjects in a grid with a custom bottom navigation bar.
 class SubjectListView extends StatelessWidget {
@@ -57,6 +58,19 @@ class SubjectListView extends StatelessWidget {
                   borderRadius: BorderRadius.circular(6),
                   onTap: () {
                     // TODO: implement navigation when subject card is tapped
+
+                    final code = viewModel.subjectNameCodeMap[subjects[index]];
+
+                    if (code != null) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              TopicsListView(courseCode: code,
+                              ),
+                        ),
+                      );
+                    }
                   },
                   child: Card(
                     color: const Color(0xffb00000),

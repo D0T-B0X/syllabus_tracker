@@ -139,7 +139,6 @@ class LoginView extends StatelessWidget {
                               // Authenticate with Supabase
                               final success = await viewModel.signIn();
                               String result = "";
-
                               // 4. Handle authentication result
                               if (success) {
                                 String? displayName = await viewModel
