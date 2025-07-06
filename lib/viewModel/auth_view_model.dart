@@ -3,9 +3,9 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:syllabus_tracker/model/auth_model.dart';
 
 //╔══════════════════════════════════════════════════════════════════════════╗
-//║ AUTH VIEW MODEL                                                        ║
-//║ Manages authentication logic, credential validation, sign up, and      ║
-//║ Supabase auth operations for the syllabus tracker application.         ║
+//║ AUTH VIEW MODEL                                                          ║
+//║ Manages authentication logic, credential validation, sign up, and        ║
+//║ Supabase auth operations for the syllabus tracker application.           ║
 //╚══════════════════════════════════════════════════════════════════════════╝
 class AuthViewModel with ChangeNotifier {
   //┌─────────────────────────────────────────────┐
@@ -126,19 +126,27 @@ class AuthViewModel with ChangeNotifier {
   }
 
   /// Registers a new user with Supabase
-  Future<void> registerUser(String email, String password) async {
+  Future<void> registerUser(String name, String email, String password) async {
     _isLoading = true;
     notifyListeners();
 
     try {
       // Attempt Supabase sign up
       final response = await Supabase.instance.client.auth.signUp(
+        // name: name,
         email: email,
         password: password,
       );
-      if (response.user == null) {
-        throw Exception("SignUp Failed");
+
+      final userId = response.user?.id;
+      if (userId != null) {
+        final insertName = await Supabase.instance.client.from('user_data').insert({
+          // .rpc('insert_display_name_profile', params: {
+          'user_id': userId,
+          'username': name,
+        });
       }
+
     } catch (e) {
       // Handle sign up failure and set error message
       String errorMsg = "SignUp Failed";
@@ -161,6 +169,7 @@ class AuthViewModel with ChangeNotifier {
 
   /// Handles sign up button logic, including password confirmation
   Future<void> signUpButton(
+      String name,
     String email,
     String password,
     String confirmPassword,
@@ -171,21 +180,22 @@ class AuthViewModel with ChangeNotifier {
       _isSuccess = false;
       notifyListeners();
       return;
-    }
-    try {
-      _isLoading = true;
-      notifyListeners();
-      await registerUser(email, password);
-      _isSuccess = true;
-      _errorMessage = null;
-      notifyListeners();
-    } catch (e) {
-      // Error already handled in registerUser
-      _isSuccess = false;
-      notifyListeners();
-    } finally {
-      _isLoading = false;
-      notifyListeners();
+    } else {
+      try {
+        _isLoading = true;
+        notifyListeners();
+        await registerUser(name, email, password);
+        _isSuccess = true;
+        _errorMessage = null;
+        notifyListeners();
+      } catch (e) {
+        // Error already handled in registerUser
+        _isSuccess = false;
+        notifyListeners();
+      } finally {
+        _isLoading = false;
+        notifyListeners();
+      }
     }
   }
 
