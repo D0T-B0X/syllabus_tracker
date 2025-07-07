@@ -6,13 +6,26 @@ import 'package:syllabus_tracker/widgets/top_app_bar.dart';
 
 /// Displays the leaderboard showing users ranked by topics completed.
 /// Features special highlighting for top 3 positions with different colors.
-class LeaderboardView extends StatelessWidget {
+class LeaderboardView extends StatefulWidget {
   const LeaderboardView({super.key});
 
+  @override
+  State<LeaderboardView> createState() => _LeaderboardViewState();
+}
+
+class _LeaderboardViewState extends State<LeaderboardView> {
   /// Static scroll controller for the leaderboard grid
   static final ScrollController _scrollController = ScrollController();
 
   @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<LeaderboardViewModel>(context, listen: false).loadData();
+    });
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
@@ -21,25 +34,30 @@ class LeaderboardView extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 1),
         child: Consumer<LeaderboardViewModel>(
           builder: (context, viewModel, child) {
-            // Load data if not already loaded and not currently loading
-            if (viewModel.userDataMap.isEmpty && !viewModel.isLoading) {
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                viewModel.loadData();
-              });
+            // Show loading indicator while data is being fetched
+            if (viewModel.isLoading) {
+              return const Center(child: CircularProgressIndicator());
             }
 
             // Show error message if data loading fails
             if (viewModel.error != null) {
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                ScaffoldMessenger.of(
-                  context,
-                ).showSnackBar(SnackBar(content: Text(viewModel.error!)));
-              });
-            }
-
-            // Show loading indicator while data is being fetched
-            if (viewModel.isLoading) {
-              return const Center(child: CircularProgressIndicator());
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Error: ${viewModel.error}",
+                      style: TextStyle(color: Colors.red, fontSize: 18),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        viewModel.loadData(); // Retry loading data
+                      },
+                      child: Text("Retry"),
+                    ),
+                  ],
+                ),
+              );
             }
 
             return Padding(

@@ -57,8 +57,6 @@ class SubjectListView extends StatelessWidget {
                 return InkWell(
                   borderRadius: BorderRadius.circular(6),
                   onTap: () {
-                    // TODO: implement navigation when subject card is tapped
-
                     final code = viewModel.subjectNameCodeMap[subjects[index]];
 
                     if (code != null) {
@@ -66,8 +64,7 @@ class SubjectListView extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) =>
-                              TopicsListView(courseCode: code,
-                              ),
+                              TopicsListView(courseCode: code),
                         ),
                       );
                     }
