@@ -140,13 +140,12 @@ class AuthViewModel with ChangeNotifier {
 
       final userId = response.user?.id;
       if (userId != null) {
-        final insertName = await Supabase.instance.client.from('user_data').insert({
+        await Supabase.instance.client.from('user_data').insert({
           // .rpc('insert_display_name_profile', params: {
           'user_id': userId,
           'username': name,
         });
       }
-
     } catch (e) {
       // Handle sign up failure and set error message
       String errorMsg = "SignUp Failed";
@@ -169,7 +168,7 @@ class AuthViewModel with ChangeNotifier {
 
   /// Handles sign up button logic, including password confirmation
   Future<void> signUpButton(
-      String name,
+    String name,
     String email,
     String password,
     String confirmPassword,
